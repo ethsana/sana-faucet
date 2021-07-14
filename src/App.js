@@ -8,7 +8,7 @@ function App() {
   const [value, setValue] = useState('');
   const [pending, setPending] = useState(false);
   const [success, setSuccess] = useState(false);
-  
+
 
   const address = useMemo(() => {
     return value.trim()
@@ -53,7 +53,7 @@ function App() {
             <input disabled={pending} type="text" placeholder='Test wallet address...' value={value} onChange={(e) => {
               setValue(e.target.value);
             }}/>
-            <button disabled={pending} onClick={onSubmit}>SUBMIT</button>
+            <button disabled={pending || !address} onClick={onSubmit}>SUBMIT</button>
           </div>
           {error && <p className='error'>The address is incorrect</p>}
           <p className={`success ${success ? ' show': ''}`}>🎉 Token has been launched, please check the wallet.</p>
