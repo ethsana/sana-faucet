@@ -47,8 +47,8 @@ jobs:
           ls -ahl
           cp -rf ./build/* ./dist
           cd ./dist
-          git config user.name MG
-          git config user.email mg@ethsana.org
+          git config user.name m-g-
+          git config user.email 1121506496@qq.com
           git add .
           #echo "Deploying to production server on branch $GITHUB_REF"
           git commit -m "Automated deployment via github action"
