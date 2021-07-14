@@ -8,6 +8,7 @@ function App() {
   const [value, setValue] = useState('');
   const [pending, setPending] = useState(false);
   const [success, setSuccess] = useState(false);
+  
 
   const address = useMemo(() => {
     return value.trim()
