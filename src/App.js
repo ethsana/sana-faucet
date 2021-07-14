@@ -29,6 +29,7 @@ function App() {
 
         if (data.code === 200) {
           setSuccess(true);
+          setValue('');
         } else {
           toast(data.msg || 'Failed');
         }
