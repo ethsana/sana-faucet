@@ -35,7 +35,7 @@ function App() {
         }
         setPending(false);
       }catch (_){
-        toast('Network error');
+        toast('Network Error');
         setPending(false);
       }
     }
