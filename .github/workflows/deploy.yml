@@ -1,0 +1,74 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - release
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v2.1.2
+        with:
+          node-version: '12.x'
+
+      - name: Get Time
+        id: time
+        uses: nanzm/get-time-action@v1.1
+        with:
+          timeZone: 8
+          format: 'YYYYMMDD.HHmmss'
+
+      - name: Get yarn cache
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - run: npm install --frozen-lockfile
+
+      - run: PUBLIC_URL=https://cdn.jsdelivr.net/gh/ethsana/sana-faucet-online@${{steps.time.outputs.time}} npm run build
+        env:
+          CI: false
+
+      - name: Deploy
+        run: |
+          rm -rf .git
+          git clone --depth 1 ${{ secrets.DEPLOY_REPO }} ./dist
+          ls -ahl
+          cp -rf ./build/* ./dist
+          cd ./dist
+          git config user.name MG
+          git config user.email mg@ethsana.org
+          git add .
+          #echo "Deploying to production server on branch $GITHUB_REF"
+          git commit -m "Automated deployment via github action"
+          git push origin master
+          git tag ${{ steps.time.outputs.time }}
+          git push origin ${{ steps.time.outputs.time }}
+
+      - name: Send dingtalk message
+        uses: ghostoy/dingtalk-action@master
+        with:
+          webhook: ${{ secrets.DINGTALK_WEBHOOK }}
+          msgtype: actionCard
+          content: |
+            {
+              "title": "faucet.ethsana.org部署成功",
+              "btnOrientation": "1",
+              "btns": [
+                {"title": "查看提交", "actionURL": "dingtalk://dingtalkclient/page/link?url=https%3A%2F%2Fgithub.com%2Fethsana%2Fsana-faucet%2Fcommit%2F${{github.sha}}&pc_slide=false"},
+                {"title": "查看版本", "actionURL": "dingtalk://dingtalkclient/page/link?url=https%3A%2F%2Fgithub.com%2Fethsana%2Fsana-faucet-online%2Freleases%2Ftag%2F${{steps.time.outputs.time}}&pc_slide=false"},
+                {"title": "线上地址", "actionURL": "dingtalk://dingtalkclient/page/link?url=https%3A%2F%2Ffaucet.ethsana.org%2F&pc_slide=false"}
+              ],
+              "text": "### faucet.ethsana.org部署成功 \n ${{github.event.head_commit.message}}"
+            }
