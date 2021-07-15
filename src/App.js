@@ -28,8 +28,10 @@ function App() {
         const data = await Api.post('/v1/faucet', {ethereumAddress: address});
 
         if (data.code === 200) {
-          setSuccess(true);
           setValue('');
+          setTimeout(() => {
+            setSuccess(true);
+          }, 50)
         } else {
           toast(data.msg || 'Failed');
         }
@@ -46,9 +48,9 @@ function App() {
         <div className='wrapper'>
           <header>
             <img src={Logo} alt="SANA"/>
-            <h1>Looking for Test SANA token</h1>
+            <h1>SANA Testnet Authenticated Faucet</h1>
           </header>
-          <p className='tips'>Fill out your test wallet address to receive 5,0000 SANA</p>
+          <p className='tips'>Fill out your test wallet address to receive 50,000 rSANA<br />Token Contract: <span>0xE479144076F2F686aef5731b101D20b846B76882</span></p>
           <div className={`input${error ? ' error-input' : ''}`}>
             <input disabled={pending} type="text" placeholder='Test wallet address...' value={value} onChange={(e) => {
               setValue(e.target.value);
