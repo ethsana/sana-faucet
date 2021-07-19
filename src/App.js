@@ -58,6 +58,7 @@ function App() {
             <button disabled={pending || !address || error} onClick={onSubmit}>SUBMIT</button>
           </div>
           {error && <p className='error'>The address is incorrect</p>}
+          <div className='network'>Goerli</div>
           <p className={`success ${success ? ' show': ''}`}>🎉 Token has been launched, please check the wallet.</p>
         </div>
       </div>
