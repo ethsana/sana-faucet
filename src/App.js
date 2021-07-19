@@ -50,7 +50,7 @@ function App() {
             <img src={Logo} alt="SANA"/>
             <h1>SANA Testnet Authenticated Faucet</h1>
           </header>
-          <p className='tips'>Fill out your test wallet address to receive 50,000 rSANA<br />Token Contract: <span>0xE479144076F2F686aef5731b101D20b846B76882</span></p>
+          <p className='tips'>Fill out your test wallet address to receive 50,001 rSANA<br />Token Contract: <span>0x28cE46D7Ad420ADeBa62d8F682bE0c84d57111B7</span></p>
           <div className={`input${error ? ' error-input' : ''}`}>
             <input disabled={pending} type="text" placeholder='Test wallet address...' value={value} onChange={(e) => {
               setValue(e.target.value);
