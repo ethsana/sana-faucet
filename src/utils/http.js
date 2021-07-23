@@ -6,7 +6,7 @@ const instance = axios.create({
   //   baseURL: 'https://games-testnet.doschain.org/recharge',
   baseURL:
     // process.env.NODE_ENV === "production" ? "https://faucet-api.ethsana.org" : "/",
-    process.env.NODE_ENV === "production" ? "https://faucet.ethsana.org" : "/",
+    process.env.NODE_ENV === "production" ? "https://faucet.ethsana.org" : "https://faucet.ethsana.org",
   timeout: 10000,
 });
 
